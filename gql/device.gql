@@ -1,0 +1,82 @@
+# 获取版本号
+query versionInfo($token: String!, $devicePackage: String!) {
+  deviceCodeByCoBo(token: $token, devicePackage: $devicePackage)
+}
+
+# 获取应用
+query deviceNameByCoBo($token: String!) {
+  deviceNameByCoBo(token: $token) {
+    devicePackage
+    deviceName
+    deviceVersion {
+      downUrl
+    }
+  }
+}
+
+# 发布版本
+mutation updateApp($token: String!, $deviceVersionInput: DeviceVersionInput!) {
+  newDeviceVersionByCoBo(token: $token, deviceVersionInput: $deviceVersionInput) {
+    deviceId
+  }
+}
+
+# (公开)分享url
+query deviceVersionUrlByCoBo($devicePackage: String!) {
+  deviceVersionUrlByCoBo(devicePackage: $devicePackage)
+}
+
+# APP信息
+query deviceByCoBo($token: String!) {
+    deviceByCoBo(token: $token){
+        deviceId
+        devicePackage
+        deviceName
+        createTime
+        updateTime
+        versionName
+        deviceVersion{
+            deviceId
+            devicePackage
+            versionCode
+            versionName
+            changeLog
+            downUrl
+            apkMd5
+            isForceUpdate
+            hasAffectCodes
+            status
+            createTime
+            updateTime
+        }
+    }
+}
+
+# 版本信息
+query deviceVersionByCoBo($token: String!, $pageNo: Int!, $pageSize: Int!, $devicePackage: String!, $key: String) {
+    deviceVersionByCoBo(token: $token, pageNo: $pageNo, pageSize: $pageSize, devicePackage: $devicePackage, key: $key){
+        pageNo
+        pageSize
+        pageTotalCount
+        pageTotalRows
+        pageRows{
+            deviceId
+            devicePackage
+            versionCode
+            versionName
+            changeLog
+            downUrl
+            apkMd5
+            isForceUpdate
+            hasAffectCodes
+            status
+            createTime
+            updateTime
+        }
+    }
+}
+
+# todo 公开 - 应用最新版本url信息
+query deviceVersionUrlByCoBo($devicePackage: String!) {
+    deviceVersionUrlByCoBo(devicePackage: $devicePackage)
+}

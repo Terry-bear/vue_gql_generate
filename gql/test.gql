@@ -1,0 +1,50 @@
+mutation editTaskByCoBo($token: String!, $offerId: String!, $status: Boolean!) {
+  editTaskByCoBo(token: $token, offerId: $offerId, status: $status)
+}
+
+query orgByCoBo($token: String!, $pageNo: Int!, $pageSize: Int!, $orgName: String, $status: Int, $isCheck:Boolean = false) {
+  orgByCoBo(token: $token, pageNo: $pageNo, pageSize: $pageSize, orgName:$orgName, status: $status) {
+    pageNo
+    pageSize
+    pageTotalRows
+    pageTotalCount
+    pageRows {
+      orgCode
+      orgNo
+      orgType
+      orgName
+      orgUrl
+      orgEmail
+      orgStatus
+      regAddress
+      industry
+      personScale
+      legalPerson
+      licensePicUrl
+      contactPerson
+      contactPhone
+      certifiedStatus
+      certifiedFeedback
+      status
+      postalLonLat 
+    }
+  }
+}
+mutation newServerByTo($token: String!, $serverNo: String!, $serverName: String!, $groupId: String, $groupName: String) {
+  newServerByTo(token: $token, serverNo: $serverNo, serverName: $serverName,groupId: $groupId,groupName: $groupName) {
+    authorizeId
+    serverNo
+    serverName
+    groupId
+    groupName
+  }
+}
+
+mutation delServerByTo($token: String!, $authorizeId: String!) {
+  delServerByTo(token: $token, authorizeId: $authorizeId)
+}
+
+# 企业名称或信用代码是否存在的接口
+query existOrgCodeOrOrgName($orgCode: String, $orgName: String) {
+  existOrgCodeOrOrgName(orgCode: $orgCode, orgName: $orgName)
+}

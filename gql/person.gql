@@ -1,0 +1,34 @@
+
+# 年龄性别结构
+query ageGenderStructureByCoGc($token: String!, $areaCode: String) {
+  ageGenderStructureByCoGc(token: $token, areaCode: $areaCode) {
+    ageGenderStructure {
+      num
+      ratio
+      icon
+      gender
+    }
+    genderStructure {
+      num
+      gender
+    }
+  }
+}
+
+# 文化比例
+query cultureProportionByCoGc($token: String!, $areaCode: String) {
+  cultureProportionByCoGc(token: $token, areaCode: $areaCode) {
+    num
+    ratio
+    icon
+  }
+}
+
+# 年龄结构
+query ageStructureByCoGc($token: String!, $areaCode: String) {
+  ageStructureByCoGc(token: $token, areaCode: $areaCode) {
+    num
+    ratio
+    icon
+  }
+}
