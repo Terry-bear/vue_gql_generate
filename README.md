@@ -1,0 +1,2 @@
+# vue_gql_generate
+基于nodejs输出的gql模型文件转js接口文件
