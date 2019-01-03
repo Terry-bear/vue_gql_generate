@@ -19,6 +19,9 @@ function readFileBuffer(filename) {
   let readStream = fs.createReadStream(filename)
   let gqlBodyArrs = []
   let fileContent = ``
+  let schemaName = `` // 模型文件名
+  let impGqlPath = `` // 导入的gql模型文件路径
+  let funcPath = `import { apolloProvider } from '@/projects/apollo.js'\nimport {mutateApollo, queryApollo} from '../G_apollo'\n\n` // 导入的apollo tool
   readStream.on('open', function(fd) {
     console.log('开始读取文件:', filename)
   })
@@ -45,9 +48,13 @@ function readFileBuffer(filename) {
         gqlBodyArrs[i] = gqlBodyArr
       }
       console.log(gqlBodyArrs)
+      schemaName = filename.replace(absPath, '').replace('.gql', '')
+      impGqlPath = `import * as ${schemaName.toUpperCase()} from '@/projects/menu/graphql/${schemaName}.gql'\n`
+      fileContent += impGqlPath
+      fileContent += funcPath
       for (let i = 0; i < gqlBodyArrs.length; i++) {
         const schemaArr = gqlBodyArrs[i]
-        fileContent += handleData(schemaArr)
+        fileContent += handleData(schemaArr, schemaName)
       }
       // 可执行js文件的名字
       let actionFileName = filename
@@ -94,21 +101,27 @@ function readFileList(path, filesList) {
  * handle graphql request data
  * @param {[]} schemaArr ['query', '&&'] or ['mutation', '&&']
  */
-function handleData(schemaArr) {
+function handleData(schemaArr, schemaName) {
   let useToken = schemaArr[2].indexOf('token')
   let hasToken = ''
   let queryOrMutation = 'queryApollo'
   if (useToken === 0) {
-    hasToken = 'token: state.token,'
+    hasToken = 'token: state.token'
     schemaArr[2].shift()
   }
   let gqlAction = `export const ${schemaArr[1]} = function(
-  { commit, state, dispatch },
-  ${JSON.stringify(schemaArr[2]).replace(/\"|\[|\]/g, '')}
+  { commit, state, dispatch }${schemaArr[2].length !== 0 ? ',' : ''}
+  ${JSON.stringify(schemaArr[2])
+    .replace(/\"|\[|\]/g, '')
+    .replace(/,/g, ',\n\t')}
   ) {
-    return ${queryOrMutation}('train', TGql.${schemaArr[1]}, {
-      ${hasToken}
-      ${JSON.stringify(schemaArr[2]).replace(/\"|\[|\]/g, '')}
+    return ${queryOrMutation}('${schemaName}', ${schemaName.toUpperCase()}.${
+  schemaArr[1]
+}, {
+      ${hasToken}${schemaArr[2].length !== 0 && useToken === 0 ? ',' : ''}
+      ${JSON.stringify(schemaArr[2])
+    .replace(/\"|\[|\]/g, '')
+    .replace(/,/g, ',\n\t\t\t')}
     })
   }\n\n`
   if (schemaArr instanceof Array) {
